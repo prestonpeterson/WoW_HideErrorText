@@ -5,5 +5,4 @@
 ## Notes: Hides error text like "Ability not ready yet", "Not enough rage", etc.
 ## SavedVariables: HideErrorTextDb
 
-config.lua
 main.lua
