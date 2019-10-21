@@ -1,0 +1,122 @@
+local _, core = ...; -- Namespace
+
+local frame = CreateFrame("Frame");
+frame:SetScript("OnEvent", function(self, event, ...)
+	return self[event](self, event, ...)
+end)
+frame:RegisterEvent("ADDON_LOADED")
+
+local combat = false
+
+function frame:ADDON_LOADED(event, ...)
+	if event == "ADDON_LOADED" then
+		HideErrorTextDb = HideErrorTextDb or {
+			hideInCombat = true,
+			hideOutOfCombat = false,
+		}
+		core:MaybeHideErrorText()
+		self:LoadInterfaceOptions()
+		self:UnregisterEvent("ADDON_LOADED")
+		self:RegisterEvent("PLAYER_REGEN_DISABLED")
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	end
+end
+
+-- Regen disabled means the player has entered combat. The entered combat event is for melee combat
+-- only.
+function frame:PLAYER_REGEN_DISABLED(event, ...)
+	combat = true
+	core:MaybeHideErrorText()
+end
+
+-- Regen enabled means the player has left combat. The left combat event is for melee combat only.
+function frame:PLAYER_REGEN_ENABLED(event, ...)
+	combat = false
+	core:MaybeHideErrorText()
+end
+
+function frame:LoadInterfaceOptions(self)
+	local loader = CreateFrame('Frame', nil, InterfaceOptionsFrame)
+	loader:SetScript('OnShow', function(self)
+		self:SetScript('OnShow', nil)
+		if not frame.optionsPanel then
+			frame.optionsPanel = frame:CreateOptionsGui("Hide Error Text")
+			InterfaceOptions_AddCategory(frame.optionsPanel);
+		end
+	end)
+end
+
+local function CreateCheckbox(name, parent)
+    local cb = CreateFrame("CheckButton", name, parent, "UICheckButtonTemplate")
+    cb:SetWidth(30)
+    cb:SetHeight(30)
+    cb:Show()
+    local cblabel = cb:CreateFontString(nil, "OVERLAY")
+    cblabel:SetFontObject("GameFontHighlight")
+    cblabel:SetPoint("LEFT", cb,"RIGHT", 5,0)
+    cb.label = cblabel
+    return cb
+end
+
+function frame:CreateOptionsGui(name, parent)
+    local f = CreateFrame("Frame", nil, InterfaceOptionsFrame)
+    f:Hide()
+
+    f.parent = parent
+    f.name = name
+
+    f:SetScript("OnShow", function(self)
+		self.content.combat:SetChecked(HideErrorTextDb.hideInCombat)
+		self.content.nocombat:SetChecked(HideErrorTextDb.hideOutOfCombat)
+    end)
+
+    local label = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+	label:SetPoint("TOPLEFT", 10, -15)
+	label:SetPoint("BOTTOMRIGHT", f, "TOPRIGHT", 10, -45)
+	label:SetJustifyH("LEFT")
+    label:SetJustifyV("TOP")
+    label:SetText(name)
+
+	local content = CreateFrame("Frame", "CADOptionsContent", f)
+	content:SetPoint("TOPLEFT", 10, -10)
+    content:SetPoint("BOTTOMRIGHT", -10, 10)
+    f.content = content
+
+    local combat = CreateCheckbox(nil, content)
+    combat.label:SetText("Hide error text in combat")
+    combat:SetPoint("TOPLEFT", 10, -50)
+	combat:SetScript("OnClick",function(self,button)
+		HideErrorTextDb.hideInCombat = combat:GetChecked()
+		core:MaybeHideErrorText()
+	end)
+	content.combat = combat
+	
+	local nocombat = CreateCheckbox(nil, content)
+    nocombat.label:SetText("Hide error text out of combat")
+    nocombat:SetPoint("TOPLEFT", 10, -80)
+	nocombat:SetScript("OnClick",function(self,button)
+		HideErrorTextDb.hideOutOfCombat = nocombat:GetChecked()
+		core:MaybeHideErrorText()
+	end)
+	content.nocombat = nocombat
+
+    return f
+end
+
+function core:MaybeHideErrorText(self)
+	if combat then
+		if HideErrorTextDb.hideInCombat then
+			UIErrorsFrame:Hide()
+		else
+			UIErrorsFrame:Clear()
+			UIErrorsFrame:Show()
+		end
+	else
+		if HideErrorTextDb.hideOutOfCombat then
+			UIErrorsFrame:Hide()
+		else
+			UIErrorsFrame:Clear()
+			UIErrorsFrame:Show()
+		end
+	end
+end

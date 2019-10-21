@@ -1,0 +1,9 @@
+## Interface: 11302
+## Title: Hide Error Text
+## DefaultState: enabled
+## Version: 1.0.0
+## Notes: Hides error text like "Ability not ready yet", "Not enough rage", etc.
+## SavedVariables: HideErrorTextDb
+
+config.lua
+main.lua
