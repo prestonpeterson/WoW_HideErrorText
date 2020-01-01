@@ -7,6 +7,7 @@ end)
 frame:RegisterEvent("ADDON_LOADED")
 
 local combat = false
+ChatFrame1:SetClampedToScreen(false)
 
 function frame:ADDON_LOADED(event, ...)
 	if event == "ADDON_LOADED" then
@@ -19,6 +20,38 @@ function frame:ADDON_LOADED(event, ...)
 		self:UnregisterEvent("ADDON_LOADED")
 		self:RegisterEvent("PLAYER_REGEN_DISABLED")
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+
+		local OrigErrHandler = UIErrorsFrame:GetScript('OnEvent')
+			UIErrorsFrame:SetScript('OnEvent', function (self, event, id, err, ...)
+				if event == "UI_ERROR_MESSAGE" then
+					if (combat and HideErrorTextDb.hideInCombat) or (not combat and HideErrorTextDb.hideOutOfCombat) then
+						if 	err == ERR_INV_FULL or
+							err == ERR_QUEST_LOG_FULL or
+							err == ERR_RAID_GROUP_ONLY or
+							err == ERR_NOT_IN_COMBAT or
+							err == ERR_PET_SPELL_DEAD or
+							err == ERR_SPELL_OUT_OF_RANGE 
+							err == ERR_OUT_OF_RANGE or
+							err == ERR_USE_TOO_FAR or
+							err == ERR_NO_PET or
+							err == ERR_PLAYER_DEAD or
+							err == ERR_BADATTACKPOS or
+							err == ERR_BADATTACKFACING or
+							err == ERR_FEIGN_DEATH_RESISTED or
+							err == SPELL_FAILED_TARGET_NO_POCKETS or
+							err == ERR_USE_TOO_FAR or
+							err == ERR_VENDOR_TOO_FAR or
+							err == ERR_ALREADY_PICKPOCKETED then
+							return OrigErrHandler(self, event, id, err, ...)
+						end
+					else
+						return OrigErrHandler(self, event, id, err, ...) 
+					end
+				elseif event == 'UI_INFO_MESSAGE'  then
+					-- Show information messages
+					return OrigErrHandler(self, event, id, err, ...)
+				end
+			end)
 	end
 end
 
@@ -104,19 +137,21 @@ function frame:CreateOptionsGui(name, parent)
 end
 
 function core:MaybeHideErrorText(self)
-	if combat then
-		if HideErrorTextDb.hideInCombat then
-			UIErrorsFrame:Hide()
+	if false then
+		if combat then
+			if HideErrorTextDb.hideInCombat then
+				UIErrorsFrame:Hide()
+			else
+				UIErrorsFrame:Clear()
+				UIErrorsFrame:Show()
+			end
 		else
-			UIErrorsFrame:Clear()
-			UIErrorsFrame:Show()
-		end
-	else
-		if HideErrorTextDb.hideOutOfCombat then
-			UIErrorsFrame:Hide()
-		else
-			UIErrorsFrame:Clear()
-			UIErrorsFrame:Show()
+			if HideErrorTextDb.hideOutOfCombat then
+				UIErrorsFrame:Hide()
+			else
+				UIErrorsFrame:Clear()
+				UIErrorsFrame:Show()
+			end
 		end
 	end
 end
