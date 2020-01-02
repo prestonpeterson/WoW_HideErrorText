@@ -7,7 +7,6 @@ end)
 frame:RegisterEvent("ADDON_LOADED")
 
 local combat = false
-ChatFrame1:SetClampedToScreen(false)
 
 function frame:ADDON_LOADED(event, ...)
 	if event == "ADDON_LOADED" then
@@ -16,6 +15,7 @@ function frame:ADDON_LOADED(event, ...)
 			hideOutOfCombat = false,
 		}
 		core:MaybeHideErrorText()
+		self:UnclampChatFrames()
 		self:LoadInterfaceOptions()
 		self:UnregisterEvent("ADDON_LOADED")
 		self:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -30,9 +30,10 @@ function frame:ADDON_LOADED(event, ...)
 							err == ERR_RAID_GROUP_ONLY or
 							err == ERR_NOT_IN_COMBAT or
 							err == ERR_PET_SPELL_DEAD or
-							err == ERR_SPELL_OUT_OF_RANGE 
+							err == ERR_SPELL_OUT_OF_RANGE or
 							err == ERR_OUT_OF_RANGE or
 							err == ERR_USE_TOO_FAR or
+							err == ERR_INVALID_ATTACK_TARGET or
 							err == ERR_NO_PET or
 							err == ERR_PLAYER_DEAD or
 							err == ERR_BADATTACKPOS or
@@ -77,6 +78,18 @@ function frame:LoadInterfaceOptions(self)
 			InterfaceOptions_AddCategory(frame.optionsPanel);
 		end
 	end)
+end
+
+function frame:UnclampChatFrames(self)
+	ChatFrame1:SetClampedToScreen(false)
+	ChatFrame2:SetClampedToScreen(false)
+	ChatFrame3:SetClampedToScreen(false)
+	ChatFrame4:SetClampedToScreen(false)
+	ChatFrame5:SetClampedToScreen(false)
+	ChatFrame6:SetClampedToScreen(false)
+	ChatFrame7:SetClampedToScreen(false)
+	ChatFrame8:SetClampedToScreen(false)
+	ChatFrame9:SetClampedToScreen(false)
 end
 
 local function CreateCheckbox(name, parent)
