@@ -22,6 +22,7 @@ function frame:ADDON_LOADED(event, ...)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 
 		local OrigErrHandler = UIErrorsFrame:GetScript('OnEvent')
+		
 			UIErrorsFrame:SetScript('OnEvent', function (self, event, id, err, ...)
 				if event == "UI_ERROR_MESSAGE" then
 					if (combat and HideErrorTextDb.hideInCombat) or (not combat and HideErrorTextDb.hideOutOfCombat) then
