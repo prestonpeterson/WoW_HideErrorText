@@ -1,5 +1,5 @@
 ## Interface: 11403
-## Title: Hide Error Text
+## Title: Hide Error Messages
 ## DefaultState: enabled
 ## Version: 1.14.107
 ## Notes: Hides error messages like "Ability not ready yet", "Not enough rage", etc.

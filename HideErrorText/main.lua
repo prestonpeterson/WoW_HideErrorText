@@ -75,7 +75,7 @@ function frame:LoadInterfaceOptions(self)
 	loader:SetScript('OnShow', function(self)
 		self:SetScript('OnShow', nil)
 		if not frame.optionsPanel then
-			frame.optionsPanel = frame:CreateOptionsGui("Hide Error Text")
+			frame.optionsPanel = frame:CreateOptionsGui("Hide Error Messages")
 			InterfaceOptions_AddCategory(frame.optionsPanel);
 		end
 	end)
@@ -130,7 +130,7 @@ function frame:CreateOptionsGui(name, parent)
     f.content = content
 
     local combat = CreateCheckbox(nil, content)
-    combat.label:SetText("Hide error text in combat")
+    combat.label:SetText("Hide error messages  in combat")
     combat:SetPoint("TOPLEFT", 10, -50)
 	combat:SetScript("OnClick",function(self,button)
 		HideErrorTextDb.hideInCombat = combat:GetChecked()
@@ -139,7 +139,7 @@ function frame:CreateOptionsGui(name, parent)
 	content.combat = combat
 	
 	local nocombat = CreateCheckbox(nil, content)
-    nocombat.label:SetText("Hide error text out of combat")
+    nocombat.label:SetText("Hide error messages out of combat")
     nocombat:SetPoint("TOPLEFT", 10, -80)
 	nocombat:SetScript("OnClick",function(self,button)
 		HideErrorTextDb.hideOutOfCombat = nocombat:GetChecked()
