@@ -1,4 +1,7 @@
-## Interface: 11403
+## Interface: 100002
+## Interface-BCC: 20504
+## Interface-Wrath: 30400
+## Interface-Classic: 11403
 ## Title: Hide Error Messages
 ## DefaultState: enabled
 ## Version: 1.14.107
