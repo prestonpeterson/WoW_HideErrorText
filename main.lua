@@ -57,6 +57,12 @@ function frame:ADDON_LOADED(event, ...)
 	end
 end
 
+local function CreateDefaultErrorDb()
+	local DefaultErrorDb = {}
+	DefaultErrorDb[ERR_OUT_OF_RANGE] = true
+	return DefaultErrorDb
+end
+
 -- Regen disabled means the player has entered combat. The entered combat event is for melee combat
 -- only.
 function frame:PLAYER_REGEN_DISABLED(event, ...)
