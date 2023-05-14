@@ -4,7 +4,7 @@
 ## Interface-Classic: 11403
 ## Title: Hide Error Messages
 ## DefaultState: enabled
-## Version: 1.14.107
+## Version: HideErrorMessagesV1.1.4
 ## Notes: Hides error messages like "Ability not ready yet", "Not enough rage", etc.
 ## SavedVariables: HideErrorTextDb
 
