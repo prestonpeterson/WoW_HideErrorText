@@ -4,7 +4,7 @@
 ## Interface-Wrath: 30401
 ## Title: Hide Error Messages
 ## DefaultState: enabled
-## Version: HideErrorMessagesV1.1.4
+## Version: HideErrorMessagesV1.2
 ## Notes: Hides error messages like "Ability not ready yet", "Not enough rage", etc.
 ## SavedVariables: HideErrorTextDb
 ## X-Curse-Project-ID: 348796
